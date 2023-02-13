@@ -19,7 +19,6 @@
 
         <!-- Arquillian 1.7.0 adds Jakarta EE 9 and JUnit 5 support-->
         <arquillian-bom.version>1.7.0.Alpha13</arquillian-bom.version>
-        <junit-jupiter.version>5.9.2</junit-jupiter.version>
         <mockito.version>5.1.1</mockito.version>
         <lombok.version>1.18.26</lombok.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
@@ -27,6 +26,7 @@
         <postgresql.version>42.5.3</postgresql.version>
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
         <hibernate-core.version>5.6.15.Final</hibernate-core.version>
+        <junit.version>4.13.2</junit.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -37,21 +37,14 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit-jupiter.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
-                <artifactId>mockito-junit-jupiter</artifactId>
+                <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -90,18 +83,13 @@
             <artifactId>jakarta.jakartaee-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
