@@ -25,6 +25,7 @@ public class Pizza implements Serializable {
     private String name;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "pizza_ingredient", joinColumns = @JoinColumn(name = "pizza_id"), inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+    @Singular
     private Set<Ingredient> ingredients = new HashSet<>();
 
     public void addIngredient(Ingredient ingredient){
