@@ -2,8 +2,10 @@ package rocks.basset.bootstrap;
 
 import rocks.basset.domain.Ingredient;
 import rocks.basset.domain.Pizza;
+import rocks.basset.repositories.IngredientRepository;
 import rocks.basset.repositories.PizzaRepository;
 
+import javax.ejb.Startup;
 import javax.inject.Inject;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -12,6 +14,9 @@ public class Bootstrap implements ServletContextListener {
 
     @Inject
     PizzaRepository pizzaRepository;
+
+    @Inject
+    IngredientRepository ingredientRepository;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -32,6 +37,15 @@ public class Bootstrap implements ServletContextListener {
         Ingredient creme = Ingredient.builder().name("Creme").build();
         Ingredient origan = Ingredient.builder().name("Origan").build();
         Ingredient pate = Ingredient.builder().name("Pate a pizza").build();
+        ingredientRepository.save(emmental);
+        ingredientRepository.save(chevre);
+        ingredientRepository.save(mozza);
+        ingredientRepository.save(jambon);
+        ingredientRepository.save(sauceTomate);
+        ingredientRepository.save(champignon);
+        ingredientRepository.save(creme);
+        ingredientRepository.save(origan);
+        ingredientRepository.save(pate);
 
         Pizza troisFromage = Pizza.builder().name("3 fromages").build();
         troisFromage.addIngredient(pate);

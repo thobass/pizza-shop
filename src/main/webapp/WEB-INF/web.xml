@@ -1,0 +1,6 @@
+<web-app>
+    <display-name>pizza-sho^</display-name>
+    <listener>
+        <listener-class>rocks.basset.bootstrap.Bootstrap</listener-class>
+    </listener>
+</web-app>
