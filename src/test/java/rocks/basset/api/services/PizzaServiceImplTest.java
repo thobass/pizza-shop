@@ -1,10 +1,10 @@
 package rocks.basset.api.services;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import rocks.basset.api.mappers.PizzaMapperImpl;
 import rocks.basset.api.model.PizzaDto;
 import rocks.basset.domain.Pizza;
@@ -13,14 +13,15 @@ import rocks.basset.repositories.PizzaRepository;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PizzaServiceImplTest {
 
     @InjectMocks
@@ -33,7 +34,7 @@ public class PizzaServiceImplTest {
     PizzaMapperImpl pizzaMapper;
 
     @Test
-    public void findById_shouldSucceed() {
+    void findById_shouldSucceed() {
         //GIVEN
         Pizza pizza = Pizza.builder().id(1L).build();
         given(pizzaRepository.findById(anyLong())).willReturn(pizza);
@@ -49,7 +50,7 @@ public class PizzaServiceImplTest {
     }
 
     @Test
-    public void save() {
+    void save() {
         //GIVEN
         PizzaDto pizzaToSave = PizzaDto.builder().name("Reine").build();
         Pizza savedPizza = Pizza.builder().id(1L).name("Reine").build();
@@ -66,7 +67,7 @@ public class PizzaServiceImplTest {
     }
 
     @Test
-    public void findAll() {
+    void findAll() {
         //GIVEN
         Pizza pizza = Pizza.builder().id(1L).build();
         Pizza anotherPizza = Pizza.builder().id(2L).build();
@@ -88,7 +89,7 @@ public class PizzaServiceImplTest {
     }
 
     @Test
-    public void delete() {
+    void delete() {
         //GIVEN
         PizzaDto pizzaDtoToDelete = PizzaDto.builder().id(1L).name("Reine").build();
         given(pizzaMapper.pizzaDtoToPizza(any(PizzaDto.class))).willCallRealMethod();
@@ -101,7 +102,7 @@ public class PizzaServiceImplTest {
     }
 
     @Test
-    public void deleteById() {
+    void deleteById() {
 
         //WHEN
         pizzaService.deleteById(1L);
