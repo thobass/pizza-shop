@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>
+  <ingredient id="1" name="Emmental"/>
+  <ingredient id="2" name="Chevre"/>
+  <ingredient id="3" name="Mozzarella"/>
+  <ingredient id="4" name="Jambon"/>
+  <ingredient id="5" name="Sauce tomate"/>
+  <ingredient id="6" name="Champignons"/>
+  <ingredient id="7" name="Creme"/>
+  <ingredient id="8" name="Origan"/>
+  <ingredient id="9" name="Pate a pizza"/>
+  <pizza id="1" name="3 fromages"/>
+  <pizza id="2" name="Reine"/>
+  <pizza_ingredient pizza_id="1" ingredient_id="1"/>
+  <pizza_ingredient pizza_id="1" ingredient_id="2"/>
+  <pizza_ingredient pizza_id="1" ingredient_id="3"/>
+  <pizza_ingredient pizza_id="1" ingredient_id="7"/>
+  <pizza_ingredient pizza_id="1" ingredient_id="9"/>
+  <pizza_ingredient pizza_id="2" ingredient_id="4"/>
+  <pizza_ingredient pizza_id="2" ingredient_id="5"/>
+  <pizza_ingredient pizza_id="2" ingredient_id="6"/>
+  <pizza_ingredient pizza_id="2" ingredient_id="8"/>
+  <pizza_ingredient pizza_id="2" ingredient_id="9"/>
+</dataset>

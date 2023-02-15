@@ -1,0 +1,23 @@
+<!ELEMENT dataset (
+    ingredient*,
+    pizza*,
+    pizza_ingredient*)>
+
+<!ELEMENT ingredient EMPTY>
+<!ATTLIST ingredient
+    id CDATA #REQUIRED
+    name CDATA #IMPLIED
+>
+
+<!ELEMENT pizza EMPTY>
+<!ATTLIST pizza
+    id CDATA #REQUIRED
+    name CDATA #IMPLIED
+>
+
+<!ELEMENT pizza_ingredient EMPTY>
+<!ATTLIST pizza_ingredient
+    pizza_id CDATA #REQUIRED
+    ingredient_id CDATA #REQUIRED
+>
+
