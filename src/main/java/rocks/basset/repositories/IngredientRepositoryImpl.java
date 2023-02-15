@@ -3,6 +3,7 @@ package rocks.basset.repositories;
 import rocks.basset.domain.Ingredient;
 import rocks.basset.domain.Pizza;
 
+import javax.ejb.Stateless;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,7 +11,7 @@ import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
-@Named
+@Stateless
 public class IngredientRepositoryImpl implements IngredientRepository{
 
     @PersistenceContext(unitName = "pizza-domain")
