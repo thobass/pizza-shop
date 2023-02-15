@@ -1,2 +1,4 @@
 /target/
 .idea/
+/dataset.dtd
+/dataset.xml
