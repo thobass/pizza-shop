@@ -5,11 +5,12 @@ import rocks.basset.domain.Pizza;
 import rocks.basset.repositories.IngredientRepository;
 import rocks.basset.repositories.PizzaRepository;
 
-import javax.ejb.Startup;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+@Named
 public class Bootstrap implements ServletContextListener {
 
     @Inject

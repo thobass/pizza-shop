@@ -5,6 +5,7 @@ import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import rocks.basset.api.mappers.IngredientMapper;
@@ -21,8 +22,14 @@ import rocks.basset.bootstrap.Bootstrap;
 import rocks.basset.domain.Ingredient;
 import rocks.basset.domain.Pizza;
 import rocks.basset.repositories.*;
+import rocks.basset.utils.BootstrapData;
 
 import javax.inject.Inject;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ArquillianExtension.class)
 public class PizzaRepositoryImplIT {
@@ -48,6 +55,7 @@ public class PizzaRepositoryImplIT {
                 .addClass(PizzaService.class)
                 .addClass(PizzaServiceImpl.class)
                 .addClass(PizzaResource.class)
+                .addClass(BootstrapData.class)
                 // Enable CDI (Optional since Java EE 7.0)
                 .addAsResource("META-INF/test-persistence.xml","META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
@@ -57,11 +65,66 @@ public class PizzaRepositoryImplIT {
     PizzaRepository pizzaRepository;
 
     @Inject
+    Bootstrap bootstrap;
+
+    @Inject
     PizzaService pizzaService;
 
+    @Inject
+    BootstrapData bootstrapData;
+
+
+//    @BeforeEach
+//    void setUp() {
+//        bootstrap.contextInitialized(null);
+//    }
+
+
     @Test
-    public void test(){
-        pizzaRepository.findAll();
-        System.out.println("TADAAAAAA - J'ai été testé");
+    void name() {
+        bootstrapData.initDBData();
+    }
+
+    @Test
+    void findAll() {
+        Set<Pizza> pizzaSet = pizzaRepository.findAll();
+        assertEquals(2, pizzaSet.size());
+    }
+
+    @Test
+    void findById(){
+        Pizza pizza = pizzaRepository.findById(1L);
+        assertEquals("3 fromages", pizza.getName());
+    }
+
+    @Test
+    void deleteById(){
+        int nbInitial = pizzaRepository.findAll().size();
+
+        pizzaRepository.deleteById(1L);
+        Pizza pizza = pizzaRepository.findById(1L);
+
+        int nbFinal = pizzaRepository.findAll().size();
+
+        assertEquals(nbInitial-1, nbFinal);
+        assertNull(pizza);
+    }
+
+    @Test
+    void delete(){
+        int nbInitial = pizzaRepository.findAll().size();
+
+        pizzaRepository.deleteById(1L);
+        Pizza pizza = pizzaRepository.findById(1L);
+
+        int nbFinal = pizzaRepository.findAll().size();
+
+        assertEquals(nbInitial-1, nbFinal);
+        assertNull(pizza);
+    }
+
+    @AfterEach
+    void tearDown() {
+
     }
 }

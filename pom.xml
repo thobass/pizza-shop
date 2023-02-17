@@ -161,8 +161,7 @@
         <dependency>
             <groupId>org.dbunit</groupId>
             <artifactId>dbunit</artifactId>
-            <version>2.7.3</version>
-            <scope>test</scope>
+            <version>2.7.0</version>
         </dependency>
     </dependencies>
     <build>
