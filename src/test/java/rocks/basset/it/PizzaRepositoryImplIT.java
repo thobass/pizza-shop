@@ -1,13 +1,14 @@
 package rocks.basset.it;
 
+import org.dbunit.dataset.DataSetException;
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit5.ArquillianExtension;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import rocks.basset.api.mappers.IngredientMapper;
 import rocks.basset.api.mappers.IngredientMapperImpl;
 import rocks.basset.api.mappers.PizzaMapper;
@@ -29,9 +30,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-@ExtendWith(ArquillianExtension.class)
+@RunWith(Arquillian.class)
 public class PizzaRepositoryImplIT {
 //
     @Deployment(testable = true)
@@ -56,6 +58,7 @@ public class PizzaRepositoryImplIT {
                 .addClass(PizzaServiceImpl.class)
                 .addClass(PizzaResource.class)
                 .addClass(BootstrapData.class)
+                .addClass(DataSetException.class)
                 // Enable CDI (Optional since Java EE 7.0)
                 .addAsResource("META-INF/test-persistence.xml","META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
@@ -81,24 +84,27 @@ public class PizzaRepositoryImplIT {
 
 
     @Test
-    void name() {
+    public void name() throws MalformedURLException, DataSetException {
         bootstrapData.initDBData();
     }
 
     @Test
-    void findAll() {
+    @UsingDataSet("dataset.xml")
+    public void findAll() {
         Set<Pizza> pizzaSet = pizzaRepository.findAll();
         assertEquals(2, pizzaSet.size());
     }
 
     @Test
-    void findById(){
+    @UsingDataSet("dataset.xml")
+    public void findById(){
         Pizza pizza = pizzaRepository.findById(1L);
         assertEquals("3 fromages", pizza.getName());
     }
 
     @Test
-    void deleteById(){
+    @UsingDataSet("dataset.xml")
+    public void deleteById(){
         int nbInitial = pizzaRepository.findAll().size();
 
         pizzaRepository.deleteById(1L);
@@ -111,7 +117,8 @@ public class PizzaRepositoryImplIT {
     }
 
     @Test
-    void delete(){
+    @UsingDataSet("dataset.xml")
+    public void delete(){
         int nbInitial = pizzaRepository.findAll().size();
 
         pizzaRepository.deleteById(1L);
@@ -121,10 +128,5 @@ public class PizzaRepositoryImplIT {
 
         assertEquals(nbInitial-1, nbFinal);
         assertNull(pizza);
-    }
-
-    @AfterEach
-    void tearDown() {
-
     }
 }

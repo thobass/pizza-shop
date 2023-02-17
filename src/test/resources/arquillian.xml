@@ -7,10 +7,14 @@
         <property name="deploymentExportPath">target/</property>
     </engine>
 
+<!--    <extension qualifier="persistence-dbunit">-->
+<!--        <property name="defaultDataSetLocation">../../../../src/test/resources/datasets/</property>-->
+<!--    </extension>-->
+
     <container qualifier="wildfly-embedded">
         <configuration>
             <!--<property name="jbossHome">${jbossHome:target/wildfly-18.0.1.Final}</property>-->
-            <property name="serverConfig">../../../../src/test/resources/standalone-h2.xml</property>
+            <property name="serverConfig">standalone-h2.xml</property>
         </configuration>
     </container>
 

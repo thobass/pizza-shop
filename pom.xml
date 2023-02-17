@@ -46,20 +46,8 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-junit-jupiter</artifactId>
                 <version>${mockito.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -112,16 +100,8 @@
             <artifactId>jakarta.jakartaee-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -149,8 +129,14 @@
         </dependency>
         <!-- Embedded Wildfly -->
         <dependency>
-            <groupId>org.jboss.arquillian.junit5</groupId>
-            <artifactId>arquillian-junit5-container</artifactId>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-persistence-dbunit</artifactId>
+            <version>1.0.0.Alpha7</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -159,13 +145,19 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.dbunit</groupId>
-            <artifactId>dbunit</artifactId>
-            <version>2.7.0</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
         <finalName>pizza-shop</finalName>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -276,7 +268,7 @@
             <build>
                 <testResources>
                     <testResource>
-                        <directory>src/test/arq-wildfly-embedded</directory>
+                        <directory>src/test/resources</directory>
                         <includes>
                             <include>*</include>
                         </includes>
@@ -310,6 +302,30 @@
                         </executions>
                     </plugin>
                     <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.7</version>
+                        <executions>
+                            <execution>
+                                <id>copy-configuration-resource</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/wildfly-${wildfly.version}/standalone/configuration</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.basedir}/src/test/resources</directory>
+                                            <includes>
+                                                <include>standalone-h2.xml</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <version>${maven-failsafe-plugin.version}</version>
                         <configuration>
@@ -320,93 +336,6 @@
                             </environmentVariables>
                             <systemPropertyVariables>
                                 <arquillian.launch>wildfly-embedded</arquillian.launch>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <!-- An optional Arquillian testing profile that executes tests in a remote
-                WildFly instance -->
-            <!-- Run with: mvn clean test -Parq-wildfly-remote -->
-            <id>arq-wildfly-remote</id>
-            <properties>
-                <skip.unit.tests>true</skip.unit.tests>
-                <skip.integration.tests>false</skip.integration.tests>
-            </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.resteasy</groupId>
-                    <artifactId>resteasy-client</artifactId>
-                    <version>${resteasy.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.resteasy</groupId>
-                    <artifactId>resteasy-jackson2-provider</artifactId>
-                    <version>${resteasy.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <!-- use Jersey client instead -->
-                <!--<dependency>
-                    <groupId>org.glassfish.jersey.media</groupId>
-                    <artifactId>jersey-media-json-binding</artifactId>
-                    <version>${jersey.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish.jersey.inject</groupId>
-                    <artifactId>jersey-hk2</artifactId>
-                    <version>${jersey.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish.jersey.core</groupId>
-                    <artifactId>jersey-client</artifactId>
-                    <version>${jersey.version}</version>
-                    <scope>test</scope>
-                </dependency>-->
-
-                <dependency>
-                    <groupId>org.wildfly.arquillian</groupId>
-                    <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>${wildfly-arquillian.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <!-- To fix 5.0.0.Alpha2 issue:
-                https://github.com/wildfly/wildfly-arquillian/discussions/201#discussioncomment-1849214-->
-                <dependency>
-                    <groupId>org.jboss.remoting</groupId>
-                    <artifactId>jboss-remoting</artifactId>
-                    <version>5.0.27.Final</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.remotingjmx</groupId>
-                    <artifactId>remoting-jmx</artifactId>
-                    <version>3.0.4.Final</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-            <build>
-                <testResources>
-                    <testResource>
-                        <directory>src/test/arq-wildfly-remote</directory>
-                        <includes>
-                            <include>*</include>
-                        </includes>
-                    </testResource>
-                </testResources>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>${maven-failsafe-plugin.version}</version>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <arquillian.launch>wildfly-remote</arquillian.launch>
-                                <!--
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager> -->
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
